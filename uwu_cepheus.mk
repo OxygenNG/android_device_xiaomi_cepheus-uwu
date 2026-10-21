@@ -8,10 +8,11 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# uwuAOSP's pixel.mk pulls in the 2.5GB GMS suite by default. cepheus has
-# a 6.0GB super partition, and the full product image would need 3.49GB,
-# pushing the partition sum 33MB past the group limit. Build vanilla.
-WITH_GMS := false
+# uwuAOSP keeps most of its framework in the GMS suite, so this stays on.
+# The 6.0 GiB super group only fits because all dynamic partitions are built
+# as compressed erofs (see sm8150-common/BoardConfigCommon.mk); with the old
+# uncompressed ext4 the partition sum overshot the group limit by 33 MiB.
+WITH_GMS := true
 
 # uwuAOSP requires these capabilities before inheriting common.mk
 UWU_DEVICE_TYPE := phone
